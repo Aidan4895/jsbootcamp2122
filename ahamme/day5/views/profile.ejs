@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Character Profile</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+  </head>
+  <body>
+    <h1>Welcome Back,</h1>
+    <div id="content">
+
+    </div>
+  </body>
+  <script type="text/javascript">
+    var characterData = <%- JSON.stringify(sendData) %>;
+    if (characterData) {
+      //Find the existing "contentBox" and make it a js object
+      var contentBox = document.getElementById('content');
+
+      //Create an h2, put the character name in and put into contentBox
+      let nameHeader = document.createElement('h2');
+      nameHeader.innerText = characterData.name;
+      contentBox.append(nameHeader);
+
+      //Create a new box just for profile stats
+      let profileBox = document.createElement('div')
+      profileBox.id = "profileBox"
+      //Put it in the contentBox
+      contentBox.append(profileBox)
+
+      //Put all stats into one header in the profileBox
+      let statsHeader = document.createElement('h3');
+      statsHeader.innerText = 'Stats';
+      let statsBox = document.createElement('div');
+      statsBox.innerText = JSON.stringify(characterData.stats);
+      profileBox.append(statsHeader)
+      profileBox.append(statsBox)
+
+      //Object.keys returns a list of all properties NAMES in a given object
+      //for..of will loop through each property NAME/key
+      for (var slot of Object.keys(characterData.equipment) ) {
+        //Each equimpment slot will have it's own header/box
+        let slotHeader = document.createElement('h3');
+        slotHeader.innerHTML = slot;
+        //Insert data of the slot into a box
+        let slotBox = document.createElement('div');
+        slotBox.innerHTML = JSON.stringify(characterData.equipment[slot]);
+        //Add the equimpment slot to the profileBox
+        profileBox.append(slotHeader)
+        profileBox.append(slotBox)
+      }
+    }
+  </script>
+  <!-- use accordion widget from jqueryui -->
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<script>
+$( function() {
+  $( "#profileBox" ).accordion({
+    collapsible: true
+  });
+} );
+</script>
+</html>
